@@ -3,8 +3,8 @@ package processapi
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/ElegenBio/go.git/common"
-	http2 "github.com/ElegenBio/go.git/http"
+	"github.com/ElegenBio/go/common"
+	http2 "github.com/ElegenBio/go/http"
 	"go.uber.org/zap"
 	"io"
 	"net/http"

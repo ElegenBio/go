@@ -1,4 +1,4 @@
-module github.com/ElegenBio/go.git
+module github.com/ElegenBio/go
 
 go 1.21.6
 
