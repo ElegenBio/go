@@ -25,12 +25,12 @@ type ProcessAPI struct {
 	pool   *http2.ConcurrentPool
 }
 
-func NewProcessAPI(url, apiKey string, timeout time.Duration, logger *zap.SugaredLogger) *ProcessAPI {
+func NewProcessAPI(url, apiKey string, timeout time.Duration, logger *zap.SugaredLogger, concurrent int) *ProcessAPI {
 	api := &ProcessAPI{
 		url:    url,
 		apiKey: apiKey,
 		logger: logger,
-		pool:   http2.NewConcurrentPool(10, timeout, logger),
+		pool:   http2.NewConcurrentPool(concurrent, timeout, logger),
 	}
 	api.pool.DefineHeaders(api.setBasicHeaders)
 	return api
