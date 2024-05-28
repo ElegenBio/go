@@ -88,6 +88,18 @@ func (s *ProcessAPI) GetOrderDetailsByIdAsync(callback ApiResponseCallback, orde
 	})
 }
 
+func (s *ProcessAPI) GetAllOrdersAsync(callback ApiResponseCallback) {
+	payload := "{}"
+	s.pool.Request(http2.HttpRequest{
+		Method:  http.MethodPost,
+		Url:     s.GetUrl("/orders/all"),
+		Payload: &payload,
+		CallBack: func(r *http.Response) {
+			callback(s.parseResponse(r))
+		},
+	})
+}
+
 func (s *ProcessAPI) HasActiveRequest() bool {
 	return !s.pool.IsEmptyPool()
 }
