@@ -112,8 +112,12 @@ func (s *ProcessAPI) Await(callback common.Callback) {
 
 func (s *ProcessAPI) parseResponse(r *http.Response) *ApiResponse {
 	//	list response
-	body, _ := io.ReadAll(r.Body)
-	err := r.Body.Close()
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		s.logger.Error("failed to read response body: ", err)
+	}
+	//body, _ := io.ReadAll(r.Body)
+	err = r.Body.Close()
 	if err != nil {
 		s.logger.Error("Response body read error: ", err)
 		return nil
