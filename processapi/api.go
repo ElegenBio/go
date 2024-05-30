@@ -91,7 +91,7 @@ func (s *ProcessAPI) GetOrderDetailsByIdAsync(callback ApiResponseCallback, orde
 func (s *ProcessAPI) GetAllOrdersAsync(callback ApiResponseCallback) {
 	payload := "{}"
 	s.pool.Request(http2.HttpRequest{
-		Method:  http.MethodPost,
+		Method:  http.MethodGet,
 		Url:     s.GetUrl("/orders/all"),
 		Payload: &payload,
 		CallBack: func(r *http.Response) {
