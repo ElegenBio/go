@@ -89,7 +89,6 @@ func (s *ProcessAPI) GetOrderDetailsByIdAsync(callback ApiResponseCallback, orde
 }
 
 func (s *ProcessAPI) GetAllOrdersAsync(callback ApiResponseCallback) {
-
 	s.pool.Request(http2.HttpRequest{
 		Method: http.MethodGet,
 		Url:    s.GetUrl("/orders/all"),
@@ -114,8 +113,13 @@ func (s *ProcessAPI) Await(callback common.Callback) {
 func (s *ProcessAPI) parseResponse(r *http.Response) *ApiResponse {
 	//	list response
 	body, _ := io.ReadAll(r.Body)
+	err := r.Body.Close()
+	if err != nil {
+		s.logger.Error("Response body read error: ", err)
+		return nil
+	}
 	var arrData []interface{}
-	err := json.Unmarshal(body, &arrData)
+	err = json.Unmarshal(body, &arrData)
 	if err == nil {
 		status := r.StatusCode
 		if len(arrData) > 1 && arrData[len(arrData)-1] != 200 {
