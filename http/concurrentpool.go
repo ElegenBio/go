@@ -105,8 +105,6 @@ func (s *ConcurrentPool) IsEmptyPool() bool {
 func (s *ConcurrentPool) get(url string, body *string, poolNum int) *http.Response {
 	var req *http.Request
 	var err error
-	//ctx, sgnl := context.WithTimeout(context.Background(), time.Second*3600)
-	//defer sgnl()
 	start := time.Now().UnixNano() / int64(time.Millisecond)
 	if body != nil {
 		s.logger.Debug("Request to Process API\t", poolNum, "\tMethod: GET", "\turl: ", url, "\tpayload: ", *body)
@@ -134,12 +132,10 @@ func (s *ConcurrentPool) get(url string, body *string, poolNum int) *http.Respon
 
 func (s *ConcurrentPool) post(url string, payload string, pool int) *http.Response {
 	var jsonStr = []byte(payload)
-	ctx, cncl := context.WithTimeout(context.Background(), time.Second*120)
-	defer cncl()
 	s.logger.Debug("Request to Process API\t", pool, "\tMethod: POST", "\turl: ", url, "\tpayload: ", payload)
 	start := time.Now().UnixNano() / int64(time.Millisecond)
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodPost, url, bytes.NewBuffer(jsonStr))
+	req, err := http.NewRequestWithContext(context.Background(), http.MethodPost, url, bytes.NewBuffer(jsonStr))
 	if err != nil {
 		fmt.Printf("error making http request: %s\n", err)
 	}
