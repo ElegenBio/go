@@ -88,6 +88,18 @@ func (s *ProcessAPI) GetOrderDetailsByIdAsync(callback ApiResponseCallback, orde
 	})
 }
 
+func (s *ProcessAPI) GetOrderByIdAsync(callback ApiResponseCallback, orderId string) {
+	payload := fmt.Sprintf("{\"orderId\": \"%s\"}", orderId)
+	s.pool.Request(http2.HttpRequest{
+		Method:  http.MethodPost,
+		Url:     s.GetUrl("/orders/id"),
+		Payload: &payload,
+		CallBack: func(r *http.Response) {
+			callback(s.parseResponse(r))
+		},
+	})
+}
+
 func (s *ProcessAPI) GetAllOrdersAsync(callback ApiResponseCallback) {
 	s.pool.Request(http2.HttpRequest{
 		Method: http.MethodGet,
@@ -111,13 +123,11 @@ func (s *ProcessAPI) Await(callback common.Callback) {
 }
 
 func (s *ProcessAPI) parseResponse(r *http.Response) *ApiResponse {
-	//	list response
-	//r.Body.Read()
+
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
 		s.logger.Error("failed to read response body: ", err)
 	}
-	//body, _ := io.ReadAll(r.Body)
 	err = r.Body.Close()
 	if err != nil {
 		s.logger.Error("Response body read error: ", err)
