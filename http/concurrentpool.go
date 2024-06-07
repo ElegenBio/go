@@ -146,7 +146,11 @@ func (s *ConcurrentPool) post(url string, payload string, pool int) *http.Respon
 	s.logger.Debug("Request to Process API\t Method: POST", "\turl: ", url, "\tDONE in ", end-start, "ms")
 
 	if err != nil || r.StatusCode != http.StatusOK {
-		s.logger.Error(err, "\tmethod:\tPOST\tstatus: ", r.Status, "\turl: ", url, "\tpayload: ", payload)
+		if r != nil {
+			s.logger.Error(err, "\tmethod:\tPOST\tstatus: ", r.Status, "\turl: ", url, "\tpayload: ", payload)
+		} else {
+			s.logger.Error(err, "\tmethod:\tPOST\turl: ", url, "\tpayload: ", payload)
+		}
 		return nil
 	}
 	return r
