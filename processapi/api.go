@@ -110,6 +110,18 @@ func (s *ProcessAPI) GetAllOrdersAsync(callback ApiResponseCallback) {
 	})
 }
 
+func (s *ProcessAPI) FindAccountAsync(callback ApiResponseCallback, domainName string) {
+	payload := fmt.Sprintf("{\"domainName\": \"%s\"}", domainName)
+	s.pool.Request(http2.HttpRequest{
+		Method:  http.MethodPost,
+		Url:     s.GetUrl("account/find"),
+		Payload: &payload,
+		CallBack: func(r *http.Response) {
+			callback(s.parseResponse(r))
+		},
+	})
+}
+
 func (s *ProcessAPI) HasActiveRequest() bool {
 	return !s.pool.IsEmptyPool()
 }
