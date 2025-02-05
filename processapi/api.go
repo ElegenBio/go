@@ -122,6 +122,18 @@ func (s *ProcessAPI) FindAccountAsync(callback ApiResponseCallback, domainName s
 	})
 }
 
+func (s *ProcessAPI) GetAccountPricingAsync(callback ApiResponseCallback, customerId string) {
+	payload := fmt.Sprintf("{\"id\": \"%s\"}", customerId)
+	s.pool.Request(http2.HttpRequest{
+		Method:  http.MethodGet,
+		Url:     s.GetUrl("account/pricing"),
+		Payload: &payload,
+		CallBack: func(r *http.Response) {
+			callback(s.parseResponse(r))
+		},
+	})
+}
+
 func (s *ProcessAPI) HasActiveRequest() bool {
 	return !s.pool.IsEmptyPool()
 }
